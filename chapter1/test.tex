@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{Example}
+One can easily prove (by M.I.) that
+\begin{equation}
+   f(n) = \frac{n(n+1)(2n+1)}{6}, \forall n >= 0
+\end{equation}
+
+\section*{Proof}
+
+\begin{flushleft}
+Let $f(n)$ be "$0^2+1^2+2^2+3^2+...+n^2=\frac{n(n+1)(2n+1)}{6}$".
+For $\forall n \geq 0$,
+\end{flushleft}
+
+For $n=0$,
+\begin{align*}
+   & \text{L.H.S.} = 0 \\
+   & \text{R.H.S.} = 0 \\
+\end{align*}
+
+$\because$ L.H.S. = R.H.S.
+
+$\therefore f(0)$ is true.
+
+\begin{flushleft}
+
+   Assume $S(n)$ is true for some $n=k$ where $k \geq 0$,
+   i.e. $0^2+1^2+2^2+3^2+...+k^2=\frac{k(k+1)(2k+1)}{6}$
+
+\end{flushleft}
+
+For $n=k+1$,
+\begin{align*}
+\text{L.H.S.} &= 0^2+1^2+2^2+3^2+...+k^2+(k+1)^2 \\
+&= \frac{k(k+1)(2k+1)}{6}+(k+1)^2 
+\text{(By induction assumption)} \\
+&= \frac{k(k+1)(2k+1)+6(k+1)^2}{6} \\
+&= \frac{(k+1)(k(2k+1)+6(k+1))}{6} \\
+&= \frac{(k+1)(2k^2+7k+6)}{6} \\
+&= \frac{(k+1)(k+2)(2k+3)}{6} \\
+&= \frac{(k+1)((k+1)+1)(2(k+1)+1)}{6} \\
+&= \text{R.H.S.}
+\end{align*}
+
+\begin{flushleft}
+   $\because$ L.H.S. = R.H.S. \\
+   $\therefore$ By the principle of mathematical induction,
+   $f(n)$ is true for all $n \geq 0$.
+\end{flushleft}
+
+\end{document}
