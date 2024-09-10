@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{amssymb, amsthm, enumitem}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1in,top=0.6in]{geometry}
 \usepackage[fleqn]{amsmath}
 
 \title{COMP2119 Introduction to Data Structures and Algorithms
@@ -13,51 +13,54 @@ Assignment 1 - Recursion, Mathematical Induction and Algorithm Analysis}
 
 \section{Asymptotic Bounds}
 
-$n^\pi, \pi^n, n^n,{\log n}, \pi ^ {\log n}, n^{\log \pi}, \frac{n}{\log\pi}, \frac{n}{\log n}, \frac{n}{\log {\log n}}, {\log {\frac{n}{\log n}}},\\
+$n^\pi, \pi^n, n^n,{\log n}, \pi ^ {\log n}, n^{\log \pi}, \frac{n}{\log\pi}, \frac{n}{\log n}, \frac{n}{\log {\log n}}, {\log {\frac{n}{\log n}}},
 \pi ^ {\log (2n)}, n^{\log{2\pi}}, \sqrt[]{\sum_{i=1}^{n} (i+1)}, 1910n! + 316n^n$
 
 \section{Recurrence Relations}
 
 \begin{enumerate}[label=(\alph*)]
 \item $\begin{aligned}[t]
-T(n) &= T(n - 1) + 3 \indent \indent \text{for}\ n > 0&\\
-&= T(n - 2) + 3 + 3 \indent \indent \text{for}\ n > 1&\\
-&= \dots &\\
-&= T(0) + 3n \indent \indent \text{for}\ n > 1&\\
-&= 3n \indent \indent \text{for}\ n > 1
+T(n) &= T(n - 1) + 3 \quad \text{for}\ n > 0\\
+&= T(n - 2) + 3 + 3 \quad \text{for}\ n > 1\\
+&= \dots \\
+&= T(0) + 3n \quad \text{for}\ n > 1\\
+&= 3n \quad \text{for}\ n > 1
 \end{aligned}$
-$\quad \ \ \therefore T(n) = \Theta(n)$
+
+$\ \therefore T(n) = \Theta(n)$
 
 \item $\begin{aligned}[t]
-\text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}&\\
-\because T(n) &= 3T(\frac{n}{3}) + n \indent \text{for $n\neq1$}&\\
-&= 3(3T(\frac{n}{9}) + \frac{n}{3}) + n \indent \text{for $n>=9$}&\\
-&= 9T(\frac{n}{9}) + n + n \indent \text{for $n>=9$}&\\
+\text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}\\
+\because T(n) &= 3T(\frac{n}{3}) + n \quad \text{for $n\neq1$}\\
+&= 3(3T(\frac{n}{9}) + \frac{n}{3}) + n \quad \text{for $n>=9$}\\
+&= 9T(\frac{n}{9}) + n + n \quad \text{for $n>=9$}\\
 &= ...&\\
-\therefore T(n) &= 3^kT(\frac{n}{3^k}) + k*n &\\
-&= 3^kT(1) + k*n&\\
-&= 0 + k*n&\\
-&= kn&\\
+\therefore T(n) &= 3^kT(\frac{n}{3^k}) + k*n \\
+&= 3^kT(1) + k*n\\
+&= 0 + k*n\\
+&= kn\\
 &= n * \log_3 n
 \end{aligned}$
-$\quad \ \ \therefore T(n) = \Theta(n \log n)$
+
+$\ \therefore T(n) = \Theta(n \log n)$
 
 \item $\begin{aligned}[t]
-\text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}&\\
-\because T(n) &= 4T(\frac{n}{3})+1
+\text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}\\
+\because T(n) &= 4T(\frac{n}{3})+1 \\
+&=
 \end{aligned}$
-$\quad \ \ \therefore T(n) = \Theta()$
+
+$\ \therefore T(n) = \Theta()$
 
 \item $\begin{aligned}[t]
-\text{Assume} & \text{ that n is a power of 2, i.e. $n=2^k$ for $k \in \mathbb{N}$, and $\log_2 n = k$,}&\\
-\because T(n) &= nT(\frac{n}{2})+n-1
+\text{Assume} & \text{ that n is a power of 2, i.e. $n=2^k$ for $k \in \mathbb{N}$, and $\log_2 n = k$,}\\
+\because T(n) &= nT(\frac{n}{2})+n-1\\
+&=
 \end{aligned}$
-$\quad \ \ \therefore T(n) = \Theta()$
+
+$\ \therefore T(n) = \Theta()$
 
 \end{enumerate}
-
-% Ensure this is a new page
-\newpage
 
 \section{Mathematical Induction}
 
