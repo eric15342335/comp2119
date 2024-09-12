@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{amssymb, amsthm, enumitem}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in,top=0.6in]{geometry}
+\usepackage[margin=1in,top=0.6in,bottom=0.6in]{geometry}
 \usepackage[fleqn]{amsmath}
 
 \title{COMP2119 Introduction to Data Structures and Algorithms
@@ -23,11 +23,12 @@ $n^\pi, \pi^n, n^n,{\log n}, \pi ^ {\log n}, n^{\log \pi}, \frac{n}{\log\pi}, \f
 T(n) &= T(n - 1) + 3 \quad \text{for}\ n > 0\\
 &= T(n - 2) + 3 + 3 \quad \text{for}\ n > 1\\
 &= \dots \\
-&= T(0) + 3n \quad \text{for}\ n > 1\\
-&= 3n \quad \text{for}\ n > 1
+\therefore T(n) &= T(0) + 3n\\
+&= 3n
 \end{aligned}$
 
-$\ \therefore T(n) = \Theta(n)$
+$
+\therefore T(n) = \Theta(n)$
 
 \item $\begin{aligned}[t]
 \text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}\\
@@ -46,19 +47,39 @@ $\ \therefore T(n) = \Theta(n \log n)$
 
 \item $\begin{aligned}[t]
 \text{Assume} & \text{ that n is a power of 3, i.e. $n=3^k$ for $k \in \mathbb{N}$, and $\log_3 n = k$,}\\
-\because T(n) &= 4T(\frac{n}{3})+1 \\
-&=
+\because T(n) &= 4T(\frac{n}{3})+1 \quad \text{for $n>=3$}\\
+&= 4(4T(\frac{n}{9}) + 1) + 1 \quad \text{for $n>=9$}\\
+&= 16T(\frac{n}{9}) + 4^{k-1} + ... + 4^0 \quad \text{for $n>=9$}\\
+&= ...\\
+\therefore T(n) &= 4^kT(\frac{n}{3^k}) + \frac{1*(1-4^k)}{1-4} \\
+&= 4^kT(1) + \frac{4^k-1}{3} \\
+&= 0 + \frac{4^{log_3 n}-1}{3} \\
+&= \frac{1}{3} * 4^{log_3 n} - \frac{1}{3} \\
+&= \frac{1}{3} * 3^{(log_3 4)(log_3 n)} - \frac{1}{3} \\
+&= \frac{1}{3} * n^{log_3 4} - \frac{1}{3} \\
 \end{aligned}$
 
-$\ \therefore T(n) = \Theta()$
+$\ \therefore T(n) = \Theta(n^{log_3 4})$
 
 \item $\begin{aligned}[t]
 \text{Assume} & \text{ that n is a power of 2, i.e. $n=2^k$ for $k \in \mathbb{N}$, and $\log_2 n = k$,}\\
-\because T(n) &= nT(\frac{n}{2})+n-1\\
-&=
+\because T(n) &= nT(\frac{n}{2})+n-1 \quad \text{for $n>=2$}\\
+&= n*(\frac{n}{2}*T(\frac{n}{4}) + \frac{n}{2} - 1) + n - 1 \quad \text{for $n>=4$}\\
+&= \frac{n^2}{2}*T(\frac{n}{4}) + \frac{n^2}{2} - n + n - 1 \quad \text{for $n>=4$}\\
+&= \frac{n^2}{2}*T(\frac{n}{4}) + \frac{n^2}{2} - 1 \quad \text{for $n>=4$}\\
+&= \frac{n^2}{2}*(\frac{n}{4}*T(\frac{n}{8}) + \frac{n}{4} - 1) + \frac{n^2}{2} - 1 \quad \text{for $n>=8$}\\
+&= \frac{n^3}{2*4}*T(\frac{n}{8})+\frac{n^3}{2*4} - \frac{n^2}{2} + \frac{n^2}{2} - 1 \quad \text{for $n>=8$}\\
+&= \frac{n^3}{2^1*2^2}*T(\frac{n}{2^1*2^2})+\frac{n^3}{2^1*2^2} - 1 \quad \text{for $n>=8$}\\
+&= \dots\\
+\therefore T(n) &= \frac{n^k}{2^0*2^1*2^2*...*2^{k-1}}*T(1) + \frac{n^k}{2^0*2^1*2^2*...*2^{k-1}} - 1\\
+&= \frac{n^k}{2^{\frac{(k-1)*k}{2}}}*2-1\\
+&= \frac{n^k}{n^{\frac{k-1}{2}}}*2-1\\
+&= n^{\frac{2k}{2}-\frac{k-1}{2}}*2-1\\
+&= n^{\frac{k+1}{2}}*2-1\\
+&= 2n^{\frac{log_2 n +1}{2}}-1\\
 \end{aligned}$
 
-$\ \therefore T(n) = \Theta()$
+$\ \therefore T(n) = \Theta(n^{\frac{log_2 n+1}{2}})$
 
 \end{enumerate}
 
@@ -78,6 +99,57 @@ $\begin{aligned}
 $\because$ L.H.S. = R.H.S.
 
 $\therefore f(1)$ is true.
+
+\paragraph*{Inductive Step:\\}
+Assume that $f(n)$ is true when $n = k$, for some $k \in \mathbb{Z}^+$, i.e. $f(k) = 1*2^1 + 2*2^2 + 3*2^3 + ... + k*2^k = (k-1)2^{k+1} + 2$.
+
+$\begin{aligned}
+\text{Consider the case } n=k+1, \ \text{L.H.S.} &= 1*2^1 + 2*2^2 + 3*2^3 + ... + k*2^k + (k+1)*2^{k+1} \\
+&= (k-1)2^{k+1} + 2 + (k+1)*2^{k+1} \quad \text{(by induction hypothesis)} \\
+&= 2^{k+1} * (2k) + 2 \\
+&= (k)2^{k+2} + 2 \\
+&= (k+1-1)2^{k+1+1} + 2 \\
+&= \text{R.H.S.}
+\end{aligned}$
+
+$\because f(n)$ is true when $n = k+1$.
+
+$\therefore$ By the principle of mathematical induction,
+$f(n)$ is true for all $n \in \mathbb{Z}^+$.
+
+\item Let $f(n)$ be the predicate "$\frac{1}{\sqrt{1}+\sqrt{2}} + \frac{1}{\sqrt{2}+\sqrt{3}} + \frac{1}{\sqrt{3}+\sqrt{4}} + ... + \frac{1}{\sqrt{n}+\sqrt{n+1}} = \sqrt{n+1}-1$ for $\forall n \in \mathbb{Z}^+$ ".
+
+$\begin{aligned}
+\text{For } n=1, \text{L.H.S.} &= \frac{1}{\sqrt{1}+\sqrt{2}} \\
+&= \frac{1}{\sqrt{1}+\sqrt{2}} * \frac{\sqrt{1}-\sqrt{2}}{\sqrt{1}-\sqrt{2}} \\
+&= \frac{\sqrt{1}-\sqrt{2}}{1-2} \\
+&= \sqrt{2} - 1 \\
+\text{R.H.S.} &= \sqrt{1+1} - 1 \\
+&= \sqrt{2} - 1 \\
+\because \text{L.H.S.} = \text{R.H.S.} \\
+\therefore f(1) \text{ is true.}
+\end{aligned}$
+
+\paragraph*{Inductive Step:\\}
+Assume that $f(n)$ is true when $n = k$, for some $k \in \mathbb{Z}^+$, i.e. $f(k) = \frac{1}{\sqrt{1}+\sqrt{2}} + \frac{1}{\sqrt{2}+\sqrt{3}} + \frac{1}{\sqrt{3}+\sqrt{4}} + ... + \frac{1}{\sqrt{k}+\sqrt{k+1}} = \sqrt{k+1}-1$.
+
+Consider the case $n=k+1$,
+
+$\begin{aligned}
+\text{L.H.S.} &= \frac{1}{\sqrt{1}+\sqrt{2}} + \frac{1}{\sqrt{2}+\sqrt{3}} + \frac{1}{\sqrt{3}+\sqrt{4}} + ... + \frac{1}{\sqrt{k}+\sqrt{k+1}} + \frac{1}{\sqrt{k+1}+\sqrt{k+2}} \\
+&= \sqrt{k+1}-1 + \frac{1}{\sqrt{k+1}+\sqrt{k+2}} \quad \text{(by induction hypothesis)} \\
+&= \sqrt{k+1}-1 + \frac{1}{\sqrt{k+1}+\sqrt{k+2}} * \frac{\sqrt{k+1}-\sqrt{k+2}}{\sqrt{k+1}-\sqrt{k+2}} \\
+&= \sqrt{k+1}-1 + \frac{\sqrt{k+1}-\sqrt{k+2}}{1-2} \\
+&= \sqrt{k+1}-1 + \sqrt{k+2} - \sqrt{k+1} \\
+&= \sqrt{k+2} - 1 \\
+&= \sqrt{k+1+1} - 1 \\
+&= \text{R.H.S.}
+\end{aligned}$
+
+$\because f(n)$ is true when $n = k+1$.
+
+$\therefore$ By the principle of mathematical induction,
+$f(n)$ is true for all $n \in \mathbb{Z}^+$.
 
 \end{enumerate}
 
