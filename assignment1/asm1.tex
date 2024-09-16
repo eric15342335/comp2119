@@ -4,14 +4,18 @@
 \usepackage[margin=1in,top=0.6in,bottom=0.6in]{geometry}
 \usepackage[fleqn]{amsmath}
 
+\usepackage{minted}
+% Add "-shell-escape", to vscode:
+% Open settings, search for "latex-workshop.latex.tools", click "Edit in settings.json", add "-shell-escape" to the pdflatex command.
+
 \title{COMP2119 Introduction to Data Structures and Algorithms
 Assignment 1 - Recursion, Mathematical Induction and Algorithm Analysis}
-\author{Cheng Ho Ming, Eric (3036216734)}
+\author{Cheng Ho Ming, Eric (3036216734) [Section 1C, 2024]}
 
 \begin{document}
 \maketitle
 
-\section{Asymptotic Bounds}
+\section{Asymptotic Bounds $[20\%]$}
 
 $
 \Theta(\log n): (d)\ {\log n}, (j)\ {\log {\frac{n}{\log n}}}, \\
@@ -25,7 +29,7 @@ $
 \Theta(n^n): (n)\ 1910n! + 316n^n, (c)\ n^n
 $
 
-\section{Recurrence Relations}
+\section{Recurrence Relations $[20\%]$}
 
 \begin{enumerate}[label=(\alph*)]
 \item $\begin{aligned}[t]
@@ -92,7 +96,7 @@ $\ \therefore T(n) = \Theta(n^{\frac{log_2 n+1}{2}})$
 
 \end{enumerate}
 
-\section{Mathematical Induction}
+\section{Mathematical Induction $[30\%]$}
 
 \begin{enumerate}[label=(\alph*)]
 
@@ -162,6 +166,34 @@ $f(n)$ is true for all $n \in \mathbb{Z}^+$.
 
 \end{enumerate}
 
-\section{Algorithm Design}
+\section{Algorithm Design $[30\%]$}
+
+The algorithm is:
+\begin{align*}
+f(n) = 2^n = \begin{cases}
+    1, & \text{if } n = 0, \\
+    f(\frac{n}{2})^2, & \text{if } n \text{ is even}, \\
+    2 * f(\frac{n-1}{2})^2, & \text{if } n \text{ is odd}.
+\end{cases}
+\end{align*}
+
+\begin{minted}{python}
+def square_of(n:int) -> int:
+    return n**2
+
+def is_an_odd_number(n:int) -> bool:
+    return n % 2 == 1
+
+def calculate_2_power_n(n:int) -> int:
+    # Calculate 2^n faster than O(n) time
+    if n == 0:
+        return 1
+    elif is_an_odd_number(n):
+        return 2 * square_of(calculate_2_power_n((n-1)/2))
+    else:
+        return square_of(calculate_2_power_n(n/2))
+\end{minted}
+Running time of the algorithm:
+
 
 \end{document}
