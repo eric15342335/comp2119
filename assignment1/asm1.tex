@@ -4,7 +4,7 @@
 \usepackage[margin=1in,top=0.6in,bottom=0.6in]{geometry}
 \usepackage[fleqn]{amsmath}
 
-\usepackage{minted}
+% \usepackage{minted}
 % Add "-shell-escape", to vscode:
 % Open settings, search for "latex-workshop.latex.tools", click "Edit in settings.json", add "-shell-escape" to the pdflatex command.
 
@@ -21,7 +21,7 @@ $
 \Theta(\log n): (d)\ {\log n}, (j)\ {\log {\frac{n}{\log n}}}, \\
 \Theta(\frac{n}{\log n}): (h)\ \frac{n}{\log n}, \\\
 \Theta(\frac{n}{\log {\log n}}): (i)\ \frac{n}{\log {\log n}}, \\
-\Theta(\frac{n}{\log\pi}): (g)\ \frac{n}{\log\pi}, (m)\ \sqrt[]{\sum_{i=1}^{n} (i+1)}, \\
+\Theta(n): (g)\ \frac{n}{\log\pi}, (m)\ \sqrt[]{\sum_{i=1}^{n} (i+1)}, \\
 \Theta(n^{\log \pi}): (e)\ \pi ^ {\log n}, (f)\ n^{\log \pi}, (k)\ \pi ^ {\log (2n)}, \\
 \Theta(n^{\log{2\pi}}): (l)\ n^{\log{2\pi}}, \\
 \Theta(n^\pi): (a)\ n^\pi, \\
@@ -168,32 +168,55 @@ $f(n)$ is true for all $n \in \mathbb{Z}^+$.
 
 \section{Algorithm Design $[30\%]$}
 
-The algorithm is:
+The algorithm is: \\
+For $\ n \in \mathbb{Z}^+$,
 \begin{align*}
 f(n) = 2^n = \begin{cases}
-    1, & \text{if } n = 0, \\
+    2, & \text{if } n = 1, \\
     f(\frac{n}{2})^2, & \text{if } n \text{ is even}, \\
-    2 * f(\frac{n-1}{2})^2, & \text{if } n \text{ is odd}.
+    2 * f(n-1), & \text{if } n \text{ is odd and } n>1.
 \end{cases}
 \end{align*}
+Correctness of the algorithm:
 
-\begin{minted}{python}
-def square_of(n:int) -> int:
-    return n**2
+\paragraph*{Base case:}
+\begin{align*}
+\text{For } n &= 1, f(1) = 2^1 = 2, \text{ which is correct.}
+\end{align*}
 
-def is_an_odd_number(n:int) -> bool:
-    return n % 2 == 1
+\paragraph*{Inductive Step:}
+\begin{align*}
+\text{For } n &= 2k, \text{ where } k \in \mathbb{Z}^+ \\
+f(2k) &= f(k)^2 = (2^k)^2 = 2^{2k} = 2^{2k}, \text{ which is correct.}
+\end{align*}
+\begin{align*}
+\text{For } n = 2&k+1, \text{ where } k \in \mathbb{Z}^+ \\
+f(2k+1) &= 2 * f(2k+1-1) = 2 * f(2k) \\
+&= 2 * f(k)^2 \\
+&= 2 * 2^{2k} \\
+&= 2^{2k+1}, \text{ which is correct.}
+\end{align*}
 
-def calculate_2_power_n(n:int) -> int:
-    # Calculate 2^n faster than O(n) time
-    if n == 0:
-        return 1
-    elif is_an_odd_number(n):
-        return 2 * square_of(calculate_2_power_n((n-1)/2))
-    else:
-        return square_of(calculate_2_power_n(n/2))
-\end{minted}
+$\because$ f(2k) is true if f(k) is true, and f(2k+1) is true if f(2k) is true.
+
+$\therefore$ By the principle of mathematical induction, the algorithm is correct.
+
+\text{ } \\
 Running time of the algorithm:
-
+\begin{align*}
+f(n) &= f(\frac{n}{2})^2, \text{ if n is even} \\
+&= f(\frac{n}{4})^{2^2}, \text{ if } \frac{n}{2} \text{ is even} \\
+&= \dots \\
+&= f(\frac{n}{2^k})^{2^{2^{2^{\dots}} \text{ <-- k amount of "2"s}}}, \text{ for } n = 2^k \text{ such that } k = \log_2 n \\
+&= 2^{2^{2^{\dots}}}
+\end{align*}
+$\because$ in this case, our algorithm needs to perform $k = \log_2 n$ squaring operations, and each squaring operation takes $O(1)$ time (as the typical algorithm for squaring a number: $2^n = 2 * 2^{n-1}$ for $n \in \mathbb{Z}^+$ and $n>1$ takes $O(n)$ time). \\
+$\therefore$ $f(n) = O(\log n)$ if $n$ is even.
+\begin{align*}
+\text{If } n \text{ is odd and } n>1, f(n) &= 2 * f(n-1) \\
+&= 2 * O(f(n - 1)) \text{ where } n - 1 \text{ is an even number, } \\
+&= O(f(n - 1)), \text{ which is given to be } O(\log n).
+\end{align*}
+$\therefore$ the running time of the algorithm is $O(\log n)$, which is faster than $O(n)$.
 
 \end{document}
