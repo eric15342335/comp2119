@@ -181,11 +181,11 @@ int pop(void) {
     int _maxFreq = maxFreq();               // O(n) (maxFreq() is an linear search function)
     int i = stack.size() - 1;               // O(1)
     while (i > 0) {                         // O(n)
-        if (freq[stack[i]] == _maxFreq) {   // O(n) (inside a while loop)
-            freq[stack[i]]--;               // O(n) (inside a while loop)
-            break;                          // O(n) (inside a while loop)
+        if (freq[stack[i]] == _maxFreq) {   // O(1) (O(n) inside a while loop)
+            freq[stack[i]]--;               // O(1) (O(n) inside a while loop)
+            break;                          // O(1) (O(n) inside a while loop)
         }
-        i--;                                // O(n) (inside a while loop)
+        i--;                                // O(1) (O(n) inside a while loop)
     }
     int _val = stack[i];                    // O(1)
     stack.erase(stack.begin() + i);         // O(n) (erase() involves shifting
