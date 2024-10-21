@@ -203,24 +203,24 @@ int pop(void) {
     \begin{enumerate}[label=(\alph*)]
         \item Inserting $\{17,94,86,22,98,79,54,38\}$ to the hash table with size 7, using the hash function $h(x) = x \mod 7$ and collision handling by chaining.
         \begin{minted}[samepage]{python3}
-# Initial state:
-[NIL, NIL, NIL, NIL, NIL, NIL, NIL]
-# Insert 17 at h(17) = 17 mod 7 = 3:
-[NIL, NIL, NIL, [17], NIL, NIL, NIL]
-# Insert 94 at h(94) = 94 mod 7 = 3
-[NIL, NIL, NIL, [17,94], NIL, NIL, NIL]
-# Insert 86 at h(86) = 86 mod 7 = 2
-[NIL, NIL, [86], [17,94], NIL, NIL, NIL]
-# Insert 22 at h(22) = 22 mod 7 = 1
-[NIL, [22], [86], [17,94], NIL, NIL, NIL]
-# Insert 98 at h(98) = 98 mod 7 = 0
-[[98], [22], [86], [17,94], NIL, NIL, NIL]
-# Insert 79 at h(79) = 79 mod 7 = 2
-[[98], [22], [86,79], [17,94], NIL, NIL, NIL]
-# Insert 54 at h(54) = 54 mod 7 = 5
-[[98], [22], [86,79], [17,94], NIL, [54], NIL]
-# Insert 38 at h(38) = 38 mod 7 = 3
-[[98], [22], [86,79], [17,94,38], NIL, [54], NIL]
+    # Initial state:
+    [NIL, NIL, NIL, NIL, NIL, NIL, NIL]
+    # Insert 17 at h(17) = 17 mod 7 = 3:
+    [NIL, NIL, NIL, [17], NIL, NIL, NIL]
+    # Insert 94 at h(94) = 94 mod 7 = 3
+    [NIL, NIL, NIL, [17,94], NIL, NIL, NIL]
+    # Insert 86 at h(86) = 86 mod 7 = 2
+    [NIL, NIL, [86], [17,94], NIL, NIL, NIL]
+    # Insert 22 at h(22) = 22 mod 7 = 1
+    [NIL, [22], [86], [17,94], NIL, NIL, NIL]
+    # Insert 98 at h(98) = 98 mod 7 = 0
+    [[98], [22], [86], [17,94], NIL, NIL, NIL]
+    # Insert 79 at h(79) = 79 mod 7 = 2
+    [[98], [22], [86,79], [17,94], NIL, NIL, NIL]
+    # Insert 54 at h(54) = 54 mod 7 = 5
+    [[98], [22], [86,79], [17,94], NIL, [54], NIL]
+    # Insert 38 at h(38) = 38 mod 7 = 3
+    [[98], [22], [86,79], [17,94,38], NIL, [54], NIL]
         \end{minted}
         As an empty slot or a NIL pointer access should also be counted as one inspection, an unsuccessful search on $h(?) = 0$ would take 2 inspections (1 for accessing 98 and 1 for NIL pointer access), for example. \\
         Average number of slots inspected for an unsuccessful search after the keys are inserted would be:
@@ -228,23 +228,33 @@ int pop(void) {
         \frac{2+2+3+4+1+2+1}{7} = \frac{15}{7} \approx 2.14 \text{ (correct to 3 significant figures)}
         \]
 
-        \item
-        \[
-        \text{Load factor: } a = \frac{8}{11}
-        \]
+        \item After insertion, the hash table would look like this:
+        \begin{minted}[samepage]{python3}
+    [22,86,79,NIL,NIL,54,17,NIL,38,94,98]
+        \end{minted}
         The average number of slots inspected for an unsuccessful search after the keys are inserted would be:
         \[
-        \frac{1+\frac{1}{(1-\frac{8}{11})^2}}{2} = \frac{1+\frac{121}{9}}{2} = \frac{130}{18} = \frac{65}{9} \approx 7.22 \text{ (correct to 3 significant figures)}
+        \frac{2+2+5+1+1+4+4+1+3+3+6}{11} = \frac{32}{11} \approx 2.91 \text{ (correct to 3 significant figures)}
         \]
 
         \item
-        \[
-        \text{Load factor: } a = \frac{8}{11}
-        \]
+        After insertion, the hash table would look like this:
+        \begin{minted}[samepage]{python3}
+    [22,54,79,NIL,NIL,38,17,NIL,94,86,98]
+        \end{minted}
+        Since it is a double hash function, the probing sequence can be different even if the first inspected slot is the same.
+
+        In this case, we notice that for $x = 0$ or $11$, their first inspected slots are both $0$ (as $h(0,0) = h(11,0) = 0$), but their next inspected slots are $h(0,1)=2$ and $h(11,1)=1$ respectively.
+
+        Looking at the function, we can see the second hash function $h_2(x) = 2-(x \mod 2)$ returns $2$ if $x$ is even and $1$ if $x$ is odd.
+
+        Since we are calculating average, we assume $x$ has equal chance ($50\%$) for being even or odd.
+
         The average number of slots inspected for an unsuccessful search after the keys are inserted would be:
-        \[
-        \frac{1}{1-\frac{8}{11}} = \frac{11}{3} \approx 3.67 \text{ (correct to 3 significant figures)}
-        \]
+        \begin{align*}
+        &\quad \ \frac{\frac{4+3}{2}+\frac{3+2}{2}+\frac{2+2}{2}+1+1+\frac{3+2}{2}+\frac{2+5}{2}+1+\frac{7+4}{2}+\frac{6+4}{2}+\frac{5+3}{2}}{11} \\
+        &= \frac{63}{22} \approx 2.86 \text{ (correct to 3 significant figures)}
+        \end{align*}
     \end{enumerate}
 
 \end{enumerate}
