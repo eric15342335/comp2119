@@ -9,49 +9,47 @@ int main() {
     cin >> n >> m; // Number of sectors and corridors
 
     // Adjacency list representation of the graph
-    vector<vector<int>> adj(n, vector<int>());
+    vector<vector<int>> adj(n, vector<int>(n, 0));
 
-    // Reading corridors and building the graph
-    for(int i = 0; i < m; ++i){
+    // input corridors
+    for (int i = 0; i < m; i++) {
         int a, b, t;
         cin >> a >> b >> t;
-        // Assuming corridors are undirected
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+        adj[a][b] = t;
+        adj[b][a] = t;
     }
 
     int s;
     cin >> s; // Starting sector
 
-    // Vector to keep track of visited sectors
-    vector<bool> visited(n, false);
+    vector<int> visited(n, 0);
+    queue<int> to_visit;
+    to_visit.push(s);
 
-    // BFS queue
-    queue<int> q;
-    q.push(s);
-    visited[s] = true;
+    // breadth first search
+    while (to_visit.size() > 0) {
+        // queue.pop does not return the value
+        int current = to_visit.front();
+        to_visit.pop();
+        // Mark as visited
+        visited[current] = 1;
 
-    // Perform BFS
-    while(!q.empty()){
-        int current = q.front();
-        q.pop();
-
-        // Visit all adjacent sectors
-        for(auto &neighbor : adj[current]){
-            if(!visited[neighbor]){
-                visited[neighbor] = true;
-                q.push(neighbor);
+        // check whether corridor is available to other sectors
+        for (int i = 0; i < n; i++) {
+            if (adj[current][i] > 0 && visited[i] == 0) {
+                to_visit.push(i);
             }
         }
     }
 
-    // Count the number of sectors not visited (unreachable)
-    int p = 0;
-    for(int i = 0; i < n; ++i){
-        if(!visited[i]) p++;
+    // count unreachable sectors
+    int unreachable = 0;
+    for (int i = 0; i < n; i++) {
+        if (visited[i] == 0) {
+            unreachable++;
+        }
     }
 
-    cout << p; // Output the result
-
+    cout << unreachable << endl;
     return 0;
 }

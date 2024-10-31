@@ -47,7 +47,7 @@ do
 
     # Compile the C++ source file
     echo "Compiling $source_file ..."
-    g++ -pedantic-errors -std=c++11 -o "$executable" "$source_file"
+    g++ -pedantic-errors -std=c++11 -Wall -Wextra -o "$executable" "$source_file"
     if [ $? -ne 0 ]; then
         echo "Compilation failed for Task $task. Skipping tests for this task."
         continue

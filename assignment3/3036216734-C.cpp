@@ -8,21 +8,18 @@ using namespace std;
 typedef pair<int, int> pii; // Pair of (current time, sector)
 
 int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0); // Improve input/output efficiency
-
     int n, m;
-    cin >> n >> m; // Input number of sectors and corridors
+    cin >> n >> m; // Number of sectors and corridors
 
-    // Adjacency list to represent the graph, where each sector has a list of neighbors storing (neighbor sector, travel time)
-    vector<vector<pii>> adj(n, vector<pii>());
+    // Adjacency list representation of the graph
+    vector<vector<int>> adj(n, vector<int>(n, 0));
 
-    // Read the corridor information and build the graph
-    for(int i = 0; i < m; ++i){
+    // input corridors
+    for (int i = 0; i < m; i++) {
         int a, b, t;
         cin >> a >> b >> t;
-        adj[a].emplace_back(b, t);
-        adj[b].emplace_back(a, t); // Assuming the corridors are undirected
+        adj[a][b] = t;
+        adj[b][a] = t;
     }
 
     // Read the lockdown times for each sector
@@ -34,55 +31,35 @@ int main(){
     int s, d;
     cin >> s >> d; // Starting sector and destination sector
 
-    // Vector to store the minimum time to reach each sector, initialized to infinity
+    // Vector to store the minimum time to reach each sector
     vector<int> dist(n, numeric_limits<int>::max());
-    dist[s] = 0; // Starting sector has time 0
 
-    // Priority queue (min-heap) storing (current time, sector)
+    // priority queue (distance, sector)
     priority_queue<pii, vector<pii>, std::greater<pii>> pq;
-    pq.emplace(0, s);
+    pq.push({0, s});
 
-    while(!pq.empty()){
-        int current_time = pq.top().first;
-        int current = pq.top().second;
+    while (!pq.empty()) {
+        int target_sector = pq.top().second;
+        int target_distance = pq.top().first;
         pq.pop();
 
-        // If the destination sector is reached, stop the process
-        if(current == d){
-            break;
-        }
+        if (target_distance < dist[target_sector]) {
+            dist[target_sector] = target_distance;
 
-        // **Correction starts here**
-        // Skip the sector if it is not the starting sector and the current time is greater than or equal to its lockdown time
-        if(current != s && current_time >= lockdown[current]){
-            continue;
-        }
-        // **Correction ends here**
-
-        // Explore all neighbors of the current sector
-        for(auto &edge : adj[current]){
-            int neighbor = edge.first;
-            int travel_time = edge.second;
-            int arrival_time = current_time + travel_time;
-
-            // Check if the arrival time at the neighbor sector is before its lockdown time
-            if(arrival_time < lockdown[neighbor]){
-                // If the new arrival time is shorter, update and add to the priority queue
-                if(arrival_time < dist[neighbor]){
-                    dist[neighbor] = arrival_time;
-                    pq.emplace(arrival_time, neighbor);
+            for (int i = 0; i < n; i++) {
+                // modification from part b:
+                // check if the corridor is available and the time to reach the sector is less than the lockdown time
+                if (adj[target_sector][i] > 0 && target_distance + adj[target_sector][i] < lockdown[i]) {
+                    pq.push({target_distance + adj[target_sector][i], i});
                 }
             }
         }
     }
 
-    // Check if the destination sector was successfully reached
-    if(dist[d] != numeric_limits<int>::max()){
-        cout << dist[d];
+    if (dist[d] == numeric_limits<int>::max()) {
+        cout << -1 << endl;
+    } else {
+        cout << dist[d] << endl;
     }
-    else{
-        cout << "-1";
-    }
-
     return 0;
 }

@@ -5,21 +5,21 @@
 
 using namespace std;
 
-typedef pair<int, int> pii; // Pair of (distance, sector)
+typedef pair<int, int> pii;
 
 int main(){
     int n, m;
     cin >> n >> m; // Number of sectors and corridors
 
-    // Adjacency list: each sector has a list of pairs (neighbor, travel time)
-    vector<vector<pii>> adj(n, vector<pii>());
+    // Adjacency list representation of the graph
+    vector<vector<int>> adj(n, vector<int>(n, 0));
 
-    // Reading corridors and building the graph
-    for(int i = 0; i < m; ++i){
+    // input corridors
+    for (int i = 0; i < m; i++) {
         int a, b, t;
         cin >> a >> b >> t;
-        adj[a].emplace_back(b, t);
-        adj[b].emplace_back(a, t); // Assuming corridors are undirected
+        adj[a][b] = t;
+        adj[b][a] = t;
     }
 
     int s, d;
@@ -27,42 +27,31 @@ int main(){
 
     // Vector to store the minimum time to reach each sector
     vector<int> dist(n, numeric_limits<int>::max());
-    dist[s] = 0; // Starting sector has distance 0
 
-    // Min-heap priority queue (distance, sector)
+    // priority queue (distance, sector)
     priority_queue<pii, vector<pii>, std::greater<pii>> pq;
-    pq.emplace(0, s);
+    pq.push({0, s});
 
-    while(!pq.empty()){
-        int current_dist = pq.top().first;
-        int current = pq.top().second;
+    while (!pq.empty()) {
+        int target_sector = pq.top().second;
+        int target_distance = pq.top().first;
         pq.pop();
 
-        // If we've reached the destination, no need to continue
-        if(current == d){
-            break;
-        }
+        if (target_distance < dist[target_sector]) {
+            dist[target_sector] = target_distance;
 
-        // Explore all neighbors
-        for(auto &edge : adj[current]){
-            int neighbor = edge.first;
-            int time = edge.second;
-
-            // If a shorter path to neighbor is found
-            if(current_dist + time < dist[neighbor]){
-                dist[neighbor] = current_dist + time;
-                pq.emplace(dist[neighbor], neighbor);
+            for (int i = 0; i < n; i++) {
+                if (adj[target_sector][i] > 0) {
+                    pq.push({target_distance + adj[target_sector][i], i});
+                }
             }
         }
     }
 
-    // If destination is reachable, output the minimum time; else, -1
-    if(dist[d] != numeric_limits<int>::max()){
-        cout << dist[d];
+    if (dist[d] == numeric_limits<int>::max()) {
+        cout << -1 << endl;
+    } else {
+        cout << dist[d] << endl;
     }
-    else{
-        cout << "-1";
-    }
-
     return 0;
 }
