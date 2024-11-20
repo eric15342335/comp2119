@@ -5,7 +5,7 @@
 *.fls
 *.log
 *.synctex.gz
-**/_minted-*
+**/_minted*
 .vscode/
 
 # submission

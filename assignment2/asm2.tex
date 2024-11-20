@@ -46,7 +46,7 @@ function reOrder2(A, n)
             right = middle
         end if
     end while
-    return right
+    return right + 1
 end function
         \end{minted}
         The code performs a binary search over the list of integers $A$.
@@ -208,19 +208,19 @@ int pop(void) {
     # Insert 17 at h(17) = 17 mod 7 = 3:
     [NIL, NIL, NIL, [17], NIL, NIL, NIL]
     # Insert 94 at h(94) = 94 mod 7 = 3
-    [NIL, NIL, NIL, [17,94], NIL, NIL, NIL]
+    [NIL, NIL, NIL, [94,17], NIL, NIL, NIL]
     # Insert 86 at h(86) = 86 mod 7 = 2
-    [NIL, NIL, [86], [17,94], NIL, NIL, NIL]
+    [NIL, NIL, [86], [94,17], NIL, NIL, NIL]
     # Insert 22 at h(22) = 22 mod 7 = 1
-    [NIL, [22], [86], [17,94], NIL, NIL, NIL]
+    [NIL, [22], [86], [94,17], NIL, NIL, NIL]
     # Insert 98 at h(98) = 98 mod 7 = 0
-    [[98], [22], [86], [17,94], NIL, NIL, NIL]
+    [[98], [22], [86], [94,17], NIL, NIL, NIL]
     # Insert 79 at h(79) = 79 mod 7 = 2
-    [[98], [22], [86,79], [17,94], NIL, NIL, NIL]
+    [[98], [22], [79,86], [94,17], NIL, NIL, NIL]
     # Insert 54 at h(54) = 54 mod 7 = 5
-    [[98], [22], [86,79], [17,94], NIL, [54], NIL]
+    [[98], [22], [79,86], [94,17], NIL, [54], NIL]
     # Insert 38 at h(38) = 38 mod 7 = 3
-    [[98], [22], [86,79], [17,94,38], NIL, [54], NIL]
+    [[98], [22], [79,86], [38,17,94], NIL, [54], NIL]
         \end{minted}
         As an empty slot or a NIL pointer access should also be counted as one inspection, an unsuccessful search on $h(?) = 0$ would take 2 inspections (1 for accessing 98 and 1 for NIL pointer access), for example. \\
         Average number of slots inspected for an unsuccessful search after the keys are inserted would be:
